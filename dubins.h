@@ -20,7 +20,7 @@
 #ifndef DUBINS_H
 #define DUBINS_H
 
-// Specifically allow this code to interface with c-code
+// allow this code to interface with c-code
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -45,6 +45,10 @@ typedef struct
  */
 int dubins_init( double q0[3], double q1[3], double r, DubinsPath* traj );
 
+double dubins_path_length( DubinsPath* path );
+
+int dubins_path_sample( DubinsPath* path, double t, double q[3]);
+
 int dubins_init_normalised( double alpha, double beta, double d, DubinsPath* path );
 
 // This group of function are only exposed for testing purposes only.
@@ -57,7 +61,7 @@ void dubins_RSL( double alpha, double beta, double d, double* outputs );
 void dubins_LRL( double alpha, double beta, double d, double* outputs );
 void dubins_RLR( double alpha, double beta, double d, double* outputs );
 
-// Specifically allow this code to interface with c-code
+// allow this code to interface with c-code
 #ifdef __cplusplus
 } // extern "C"
 #endif

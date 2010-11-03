@@ -190,6 +190,15 @@ int dubins_init_normalised( double alpha,
     return 0;
 }
 
+double dubins_path_length( DubinsPath* path ) 
+{
+    double length = 0.;
+    length += path->param[0];
+    length += path->param[1];
+    length += path->param[2];
+    return length;
+}
+
 double fmodr( double x, double y) 
 {
     return x - y*::floor(x/y);
