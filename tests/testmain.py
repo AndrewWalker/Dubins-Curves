@@ -1,3 +1,4 @@
+#!/usr/bin/python
 from ctypes import *
 
 lib = CDLL('../libdubinspaths.so')
@@ -12,6 +13,7 @@ def createDubinsFunction( name ):
     func = getattr(lib, name)
     def res( alpha, beta, d ):
         output = (c_double * 3)(inf, inf, inf)
+        print output[:]
         func( c_double(alpha), c_double(beta), c_double(d), output )
         return output[:]
     return res
@@ -28,6 +30,14 @@ def dubinsInitNormalised( alpha, beta, d ):
     lib.dubins_init_normalised( c_double(alpha), c_double(beta), c_double(d), pointer(path) );
     return path
 
+def dubinsNormalised2( alpha, beta, d ):
+    funcs = [ LRL, RLR, LSL, LSR, RSL, RSR ]
+    outs  = [ fun(alpha,beta,d) for fun in funcs ]
+    lens  = [ sum(o) for o in outs ]
+    for f, o, l in zip(funcs,outs,lens):
+        print f, o, l    
+
+dubinsNormalised2( 1., 1., 5. )
 path = dubinsInitNormalised( 1., 1., 5. )
 print path.type
 print path.qi[:]

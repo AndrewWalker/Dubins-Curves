@@ -20,15 +20,17 @@
 #ifndef DUBINS_H
 #define DUBINS_H
 
+// Specifically allow this code to interface with c-code
+#ifdef __cplusplus
 extern "C" {
+#endif
 
-struct DubinsPath
+typedef struct 
 {
     double qi[3];
     double param[3];
     int type;
-};
-
+} DubinsPath;
 
 /**
  * Generate a trajectory from an initial configuration to
@@ -45,6 +47,9 @@ int dubins_init( double q0[3], double q1[3], double r, DubinsPath* traj );
 
 int dubins_init_normalised( double alpha, double beta, double d, DubinsPath* path );
 
+// This group of function are only exposed for testing purposes only.
+// The names and declarations of these functions may change in future
+
 void dubins_LSL( double alpha, double beta, double d, double* outputs );
 void dubins_RSR( double alpha, double beta, double d, double* outputs );
 void dubins_LSR( double alpha, double beta, double d, double* outputs );
@@ -52,7 +57,10 @@ void dubins_RSL( double alpha, double beta, double d, double* outputs );
 void dubins_LRL( double alpha, double beta, double d, double* outputs );
 void dubins_RLR( double alpha, double beta, double d, double* outputs );
 
+// Specifically allow this code to interface with c-code
+#ifdef __cplusplus
 } // extern "C"
+#endif
 
 #endif // DUBINS_H
 

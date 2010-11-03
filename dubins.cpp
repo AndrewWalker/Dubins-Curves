@@ -20,6 +20,7 @@
 
 #include "dubins.h"
 #include <cmath>
+#include <cassert>
 
 #define LSL (0)
 #define LSR (1)
@@ -117,9 +118,8 @@ void dubins_RLR( double alpha, double beta, double d, double* outputs )
         p = ::acos( tmp_rlr );
         t = normaliseAngle(alpha - ::atan2( ca-cb, d-sa+sb ) + normaliseAngle(p/2.));
         q = normaliseAngle(alpha - beta - t + normaliseAngle(p));
+        PACK_OUTPUTS( outputs );
     }
-
-    PACK_OUTPUTS( outputs );
 }
 
 void dubins_LRL( double alpha, double beta, double d, double* outputs )
@@ -133,15 +133,15 @@ void dubins_LRL( double alpha, double beta, double d, double* outputs )
         p = normaliseAngle(::acos(tmp_lrl));
         t = normaliseAngle(-alpha - ::atan2( ca-cb, d+sa-sb ) + p/2.);
         q = normaliseAngle(normaliseAngle(beta) - alpha -t + normaliseAngle(p));
+        PACK_OUTPUTS( outputs );
     }
 
-    PACK_OUTPUTS( outputs );
 }
 
 int dubins_init_normalised( double alpha, 
                             double beta, 
                             double d,
-                            DubinsPath* traj ) 
+                            DubinsPath* path) 
 {
 
     // Take the precaution of initialising all results
@@ -157,12 +157,15 @@ int dubins_init_normalised( double alpha,
     dubins_RSR( alpha, beta, d, results[RSR] );
     dubins_LSR( alpha, beta, d, results[LSR] );
     dubins_RSL( alpha, beta, d, results[RSL] );
+    dubins_RLR( alpha, beta, d, results[RLR] );
+    dubins_LRL( alpha, beta, d, results[LRL] );
 
     // Generate the total costs for each trajectory class
     for(int i = 0; i < 6; i++) 
     {
         results[i][3] = 0;
         for(int j = 0; j < 3; j++) {
+            assert( results[i][j] >= 0. );
             results[i][3] += results[i][j];
         }
     }
@@ -176,6 +179,13 @@ int dubins_init_normalised( double alpha,
             minCost = results[i][3];
             bestType = i;
         } 
+    }
+
+    // Copy the results into the output structure
+    path->type = bestType;
+    for(int i = 0; i < 3; i++)
+    {
+        path->param[i] = results[bestType][i];
     }
     return 0;
 }
