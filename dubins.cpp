@@ -21,6 +21,7 @@
 #include "dubins.h"
 #include <cmath>
 #include <cassert>
+#include <iostream>
 
 #define LSL (0)
 #define LSR (1)
@@ -28,6 +29,19 @@
 #define RSR (3)
 #define RLR (4)
 #define LRL (5)
+
+#define L_SEG (0)
+#define S_SEG (1)
+#define R_SEG (2)
+
+const int DIRDATA[][3] = {
+    { L_SEG, S_SEG, L_SEG },
+    { L_SEG, S_SEG, R_SEG },
+    { R_SEG, S_SEG, L_SEG },
+    { R_SEG, S_SEG, R_SEG },
+    { R_SEG, L_SEG, R_SEG },
+    { L_SEG, R_SEG, L_SEG }
+};
 
 #define UNPACK_INPUTS(alpha, beta)       \
     double sa = ::sin(alpha);            \
@@ -41,8 +55,15 @@
     outputs[1]  = p;                \
     outputs[2]  = q;
 
-double normaliseAngle( double );
+double fmodr( double x, double y) 
+{
+    return x - y*::floor(x/y);
+}
 
+double normaliseAngle( double theta )
+{
+    return fmodr( theta, 2 * M_PI );
+}
 int dubins_init( double q0[3], double q1[3], double r, DubinsPath* path )
 {
     double dx = q1[0] - q0[0];
@@ -62,12 +83,13 @@ void dubins_LSL( double alpha, double beta, double d, double* outputs )
     UNPACK_INPUTS(alpha, beta);
 
     double tmp2 = 2 + (d*d) -(2*c_ab) + (2*d*(sa - sb));
-    double tmp1 = atan( ((cb-ca)/(d+sa-sb)) );
-    double t = normaliseAngle(-alpha + tmp1 );
-    double p = sqrt( tmp2 );
-    double q = normaliseAngle(beta -   tmp1 );
-
-    PACK_OUTPUTS(outputs);
+    if( tmp2 >= 0 ) {
+        double tmp1 = atan( ((cb-ca)/(d+sa-sb)) );
+        double t = normaliseAngle(-alpha + tmp1 );
+        double p = sqrt( tmp2 );
+        double q = normaliseAngle(beta -   tmp1 );
+        PACK_OUTPUTS(outputs);
+    }
 }
 
 void dubins_RSR( double alpha, double beta, double d, double* outputs )
@@ -75,11 +97,13 @@ void dubins_RSR( double alpha, double beta, double d, double* outputs )
     UNPACK_INPUTS(alpha, beta);
 
     double tmp1 = atan( (ca-cb)/(d-sa+sb) );
-    double t = normaliseAngle( alpha - tmp1 );
-    double p = sqrt( 2 + (d*d) -(2*c_ab) + (2*d*(sb-sa)) );
-    double q = normaliseAngle( -beta + tmp1 );
-
-    PACK_OUTPUTS(outputs);
+    double tmp2 = 2 + (d*d) -(2*c_ab) + (2*d*(sb-sa));
+    if( tmp2 >= 0 ) {
+        double t = normaliseAngle( alpha - tmp1 );
+        double p = sqrt( tmp2 );
+        double q = normaliseAngle( -beta + tmp1 );
+        PACK_OUTPUTS(outputs);
+    }
 }
 
 void dubins_LSR( double alpha, double beta, double d, double* outputs )
@@ -87,12 +111,13 @@ void dubins_LSR( double alpha, double beta, double d, double* outputs )
     UNPACK_INPUTS(alpha, beta);
 
     double tmp1 = -2 + (d*d) + (2*c_ab) + (2*d*(sa+sb));
-    double p    = ::sqrt( tmp1 );
-    double tmp2 = ::atan( (-ca-cb)/(d+sa+sb) ) - ::atan(-2.0/p);
-    double t    = normaliseAngle(-alpha + tmp2);
-    double q    = normaliseAngle( -normaliseAngle(beta) + tmp2 );
-
-    PACK_OUTPUTS(outputs);
+    if( tmp1 >= 0 ) {
+        double p    = ::sqrt( tmp1 );
+        double tmp2 = ::atan( (-ca-cb)/(d+sa+sb) ) - ::atan(-2.0/p);
+        double t    = normaliseAngle(-alpha + tmp2);
+        double q    = normaliseAngle( -normaliseAngle(beta) + tmp2 );
+        PACK_OUTPUTS(outputs);
+    }
 }
 
 void dubins_RSL( double alpha, double beta, double d, double* outputs )
@@ -100,12 +125,13 @@ void dubins_RSL( double alpha, double beta, double d, double* outputs )
     UNPACK_INPUTS(alpha, beta);
 
     double tmp1 = (d*d) -2 + (2*c_ab) - (2*d*(sa+sb));
-    double p    = ::sqrt( tmp1 );
-    double tmp2 = ::atan( (ca+cb)/(d-sa-sb) ) + ::atan(2.0/p);
-    double t    = normaliseAngle(alpha - tmp2);
-    double q    = normaliseAngle(beta - tmp2);
-
-    PACK_OUTPUTS(outputs);
+    if( tmp1 > 0 ) {
+        double p    = ::sqrt( tmp1 );
+        double tmp2 = ::atan( (ca+cb)/(d-sa-sb) ) - ::atan(2.0/p);
+        double t    = normaliseAngle(alpha - tmp2);
+        double q    = normaliseAngle(beta - tmp2);
+        PACK_OUTPUTS(outputs);
+    }
 }
 
 void dubins_RLR( double alpha, double beta, double d, double* outputs )
@@ -113,11 +139,10 @@ void dubins_RLR( double alpha, double beta, double d, double* outputs )
     UNPACK_INPUTS(alpha, beta);
 
     double tmp_rlr = (6. - d*d + 2*c_ab + 2*d*(sa-sb)) / 8.;
-    double p, t, q;
     if( ::fabs(tmp_rlr) < 1) {
-        p = ::acos( tmp_rlr );
-        t = normaliseAngle(alpha - ::atan2( ca-cb, d-sa+sb ) + normaliseAngle(p/2.));
-        q = normaliseAngle(alpha - beta - t + normaliseAngle(p));
+        double p = ::acos( tmp_rlr );
+        double t = normaliseAngle(alpha - ::atan2( ca-cb, d-sa+sb ) + normaliseAngle(p/2.));
+        double q = normaliseAngle(alpha - beta - t + normaliseAngle(p));
         PACK_OUTPUTS( outputs );
     }
 }
@@ -127,12 +152,11 @@ void dubins_LRL( double alpha, double beta, double d, double* outputs )
     UNPACK_INPUTS(alpha, beta);
 
     double tmp_lrl = (6. - d*d + 2*c_ab + 2*d*(- sa + sb)) / 8.;
-    double p, t, q;
 
     if( ::fabs(tmp_lrl) < 1) {
-        p = normaliseAngle(::acos(tmp_lrl));
-        t = normaliseAngle(-alpha - ::atan2( ca-cb, d+sa-sb ) + p/2.);
-        q = normaliseAngle(normaliseAngle(beta) - alpha -t + normaliseAngle(p));
+        double p = normaliseAngle(::acos(tmp_lrl));
+        double t = normaliseAngle(-alpha - ::atan2( ca-cb, d+sa-sb ) + p/2.);
+        double q = normaliseAngle(normaliseAngle(beta) - alpha -t + normaliseAngle(p));
         PACK_OUTPUTS( outputs );
     }
 
@@ -154,9 +178,9 @@ int dubins_init_normalised( double alpha,
 
     // For each trajectory class, find the solution
     dubins_LSL( alpha, beta, d, results[LSL] ); 
-    dubins_RSR( alpha, beta, d, results[RSR] );
     dubins_LSR( alpha, beta, d, results[LSR] );
     dubins_RSL( alpha, beta, d, results[RSL] );
+    dubins_RSR( alpha, beta, d, results[RSR] );
     dubins_RLR( alpha, beta, d, results[RLR] );
     dubins_LRL( alpha, beta, d, results[LRL] );
 
@@ -175,11 +199,13 @@ int dubins_init_normalised( double alpha,
     double minCost = results[0][3];
     for(int i = 1; i < 6; i++) 
     {
+        //std::cout << i << " " << results[i][3] << std::endl;
         if( results[i][3] < minCost ) {
             minCost = results[i][3];
             bestType = i;
         } 
     }
+    //std::cout << "best = " << bestType << std::endl;
 
     // Copy the results into the output structure
     path->type = bestType;
@@ -199,12 +225,53 @@ double dubins_path_length( DubinsPath* path )
     return length;
 }
 
-double fmodr( double x, double y) 
+void dubins_segment( double t, double qi[3], double qt[3], int type) 
 {
-    return x - y*::floor(x/y);
+    assert( type == L_SEG || type == S_SEG || type == R_SEG );
+    if( type == L_SEG ) 
+    {
+        qt[0] = qi[0] + ::sin(qi[2]+t) - ::sin(qi[2]);
+        qt[1] = qi[1] - ::cos(qi[2]+t) + ::cos(qi[2]);
+        qt[2] = qi[2] + t;
+    }
+    else if( type == R_SEG ) 
+    {
+        qt[0] = qi[0] - ::sin(qi[2]-t) + ::sin(qi[2]);
+        qt[1] = qi[1] + ::cos(qi[2]-t) - ::cos(qi[2]);
+        qt[2] = qi[2] - t;
+    }
+    else // type == S_SEG 
+    {
+        qt[0] = qi[0] + ::cos(qi[2]) * t;
+        qt[1] = qi[1] + ::sin(qi[2]) * t;
+        qt[2] = qi[2];
+    }
 }
 
-double normaliseAngle( double theta )
+int dubins_path_sample( DubinsPath* path, double t, double q[3] )
 {
-    return fmodr( theta, 2 * M_PI );
+    if( t < 0 || t >= dubins_path_length(path) ) {
+        return 1;
+    }
+    const int* types = DIRDATA[path->type];
+    double p1 = path->param[0];
+    double p2 = path->param[1];
+    double q1[3]; // end-of segment 1
+    double q2[3]; // end-of segment 2
+    dubins_segment( p1,      path->qi,  q1, types[0] );
+    dubins_segment( p2,      q1,        q2, types[1] );
+    if( t < p1 ) {
+        dubins_segment( t, path->qi, q, types[0] );    
+    }
+    else if( t < (p1+p2) ) {
+        dubins_segment( t-p1, q1,        q,  types[1] );
+    }
+    else {
+        dubins_segment( t-p1-p2, q2,        q,  types[2] ); 
+    }
+    q[2] = normaliseAngle(q[2]);
+    return 0;
 }
+
+
+

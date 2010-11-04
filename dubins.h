@@ -27,9 +27,9 @@ extern "C" {
 
 typedef struct 
 {
-    double qi[3];
-    double param[3];
-    int type;
+    double qi[3];       // the initial configuration
+    double param[3];    // the lengths of the three segments
+    int type;           // encoded representation of the segment types
 } DubinsPath;
 
 /**
@@ -45,15 +45,27 @@ typedef struct
  */
 int dubins_init( double q0[3], double q1[3], double r, DubinsPath* traj );
 
+/**
+ * Calculate the length of an initialised path
+ *
+ * @param path - the path to find the length of
+ */
 double dubins_path_length( DubinsPath* path );
 
+/**
+ * Calculate the configuration along the path, using the parameter t
+ *
+ * @param path - an initialised path
+ * @param t    - a length measure, where 0 <= t < dubins_path_length(path)
+ * @param q    - the configuration result
+ * @returns    - non-zero if 't' is not in the correct range
+ */
 int dubins_path_sample( DubinsPath* path, double t, double q[3]);
 
-int dubins_init_normalised( double alpha, double beta, double d, DubinsPath* path );
 
 // This group of function are only exposed for testing purposes only.
 // The names and declarations of these functions may change in future
-
+int dubins_init_normalised( double alpha, double beta, double d, DubinsPath* path );
 void dubins_LSL( double alpha, double beta, double d, double* outputs );
 void dubins_RSR( double alpha, double beta, double d, double* outputs );
 void dubins_LSR( double alpha, double beta, double d, double* outputs );
