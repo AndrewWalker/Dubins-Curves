@@ -30,12 +30,12 @@ class DubinsTests(unittest.TestCase):
             length = dubins.pathLength(path)
             qr = dubins.pathSample(path,length-1e-10)[:]
             qr = numpy.array(qr)
-            for i in xrange(3):
-                print qr, q1, path.type
-                self.assertAlmostEquals( qr[i], q1[i] )
-
+            #print qr, q1, path.type
+            self.assertAlmostEquals( qr[0], q1[0] )
+            self.assertAlmostEquals( qr[1], q1[1] )
+            self.assertAlmostEquals( qr[2], q1[2] )
         q0 = [0,0,0.]
-        for _ in xrange(10000):
+        for _ in xrange(100000):
             q1 = (numpy.random.random(3) * numpy.array([10.,10., 2*math.pi]) ) - numpy.array([5.,5.,0.])
             impl(q0,q1)
 if __name__ == "__main__":

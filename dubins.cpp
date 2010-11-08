@@ -82,9 +82,10 @@ void dubins_LSL( double alpha, double beta, double d, double* outputs )
 {
     UNPACK_INPUTS(alpha, beta);
 
+    double tmp0 = d+sa-sb;
     double tmp2 = 2 + (d*d) -(2*c_ab) + (2*d*(sa - sb));
-    if( tmp2 >= 0 ) {
-        double tmp1 = atan( ((cb-ca)/(d+sa-sb)) );
+    if( tmp2 >= 0 && tmp0 >= 0) {
+        double tmp1 = atan( (cb-ca)/tmp0 );
         double t = normaliseAngle(-alpha + tmp1 );
         double p = sqrt( tmp2 );
         double q = normaliseAngle(beta -   tmp1 );
@@ -96,9 +97,10 @@ void dubins_RSR( double alpha, double beta, double d, double* outputs )
 {
     UNPACK_INPUTS(alpha, beta);
 
-    double tmp1 = atan( (ca-cb)/(d-sa+sb) );
+    double tmp0 = d-sa+sb;
     double tmp2 = 2 + (d*d) -(2*c_ab) + (2*d*(sb-sa));
-    if( tmp2 >= 0 ) {
+    if( tmp2 >= 0 && tmp0 >= 0) {
+        double tmp1 = atan( (ca-cb)/tmp0 );
         double t = normaliseAngle( alpha - tmp1 );
         double p = sqrt( tmp2 );
         double q = normaliseAngle( -beta + tmp1 );
