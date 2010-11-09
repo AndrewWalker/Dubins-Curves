@@ -1,2 +1,4 @@
 This software finds the shortest paths between configurations for the Dubin's 
-car. 
+car. The forward only car-like vehicle with a constrained turning radius.
+
+
