@@ -35,9 +35,15 @@ class DubinsTests(unittest.TestCase):
             self.assertAlmostEquals( qr[1], q1[1] )
             self.assertAlmostEquals( qr[2], q1[2] )
         q0 = [0,0,0.]
-        for _ in xrange(100000):
+        for _ in xrange(1):#(100000):
             q1 = (numpy.random.random(3) * numpy.array([10.,10., 2*math.pi]) ) - numpy.array([5.,5.,0.])
             impl(q0,q1)
+
+    def testSameConfigurations(self):
+        q = [0,0,0]
+        path = dubins.init( q, q )
+        self.assertAlmostEquals(dubins.pathLength(path), 0. )
+
 if __name__ == "__main__":
     unittest.main()
 
