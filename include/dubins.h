@@ -33,6 +33,15 @@ typedef struct
 } DubinsPath;
 
 /**
+ * Callback function for path sampling
+ * 
+ * @note the q parameter is a configuration
+ * @note the t parameter is the distance along the path
+ * @note return non-zero to denote sampling should be stopped
+ */
+typedef int (*DubinsPathSamplingCallback)(double q[3], double t); 
+
+/**
  * Generate a trajectory from an initial configuration to
  * a target configuration, with a specified maximum turning
  * radii
@@ -62,6 +71,15 @@ double dubins_path_length( DubinsPath* path );
  */
 int dubins_path_sample( DubinsPath* path, double t, double q[3]);
 
+/**
+ * Walk along the path at a fixed sampling interval, calling the
+ * callback function at each interval
+ *
+ * @param path      - the path to sample
+ * @param cb        - the callback function to call for each sample
+ * @param stepSize  - the distance along the path for subsequent samples
+ */
+int dubins_path_sample_many( DubinsPath* path, DubinsPathSamplingCallback cb, double stepSize );
 
 // This group of function are only exposed for testing purposes only.
 // The names and declarations of these functions may change in future

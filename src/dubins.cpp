@@ -275,5 +275,22 @@ int dubins_path_sample( DubinsPath* path, double t, double q[3] )
     return 0;
 }
 
+int dubins_path_sample_many( DubinsPath* path, DubinsPathSamplingCallback cb, double stepSize ) 
+{
+    // TODO - this implementation could be optimised by caching
+    //        some of the calculations from dubins_path_sample
 
+    double x = 0.0;
+    double length = dubins_path_length(path);
+    while( x <  length ) {
+        double q[3];
+        dubins_path_sample( path, x, q );
+        int retcode = cb(q, x);
+        if( retcode != 0 ) {
+            return retcode;    
+        }
+        x += stepSize;
+    } 
+    return 0;
+}
 
