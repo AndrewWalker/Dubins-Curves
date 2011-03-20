@@ -44,7 +44,7 @@ class DubinsTests(unittest.TestCase):
         path = dubins.init( q, q )
         self.assertAlmostEquals(dubins.pathLength(path), 0. )
 
-if __name__ == "__main__":
-    unittest.main()
+#if __name__ == "__main__":
+#    unittest.main()
 
 

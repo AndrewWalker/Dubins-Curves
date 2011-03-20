@@ -20,6 +20,11 @@
 #ifndef DUBINS_H
 #define DUBINS_H
 
+// Error codes
+#define EDUBCOCONFIGS (1)   // Colocated configurations
+#define EDUBPARAM     (2)   // Path parameterisitation error
+#define EDUBBADRHO    (3)   // the rho value is invalid
+
 // allow this code to interface with c-code
 #ifdef __cplusplus
 extern "C" {
@@ -29,6 +34,7 @@ typedef struct
 {
     double qi[3];       // the initial configuration
     double param[3];    // the lengths of the three segments
+    double rho;         // model forward velocity / model angular velocity 
     int type;           // encoded representation of the segment types
 } DubinsPath;
 
@@ -42,17 +48,17 @@ typedef struct
 typedef int (*DubinsPathSamplingCallback)(double q[3], double t); 
 
 /**
- * Generate a trajectory from an initial configuration to
+ * Generate a path from an initial configuration to
  * a target configuration, with a specified maximum turning
  * radii
  *
  * @param q0    - a configuration specified as an array of x, y, theta
  * @param q1    - a configuration specified as an array of x, y, theta
- * @param r     - the turning radius in the same units as x and y
- * @param traj  - the resultant trajectory
+ * @param rho   - forward velocity of the vehicle divided by maximum angular velocity
+ * @param path  - the resultant path
  * @return      - 0 on success
  */
-int dubins_init( double q0[3], double q1[3], double r, DubinsPath* traj );
+int dubins_init( double q0[3], double q1[3], double rho, DubinsPath* path);
 
 /**
  * Calculate the length of an initialised path
@@ -81,9 +87,26 @@ int dubins_path_sample( DubinsPath* path, double t, double q[3]);
  */
 int dubins_path_sample_many( DubinsPath* path, DubinsPathSamplingCallback cb, double stepSize );
 
+/**
+ * Convenience function to identify the endpoint of a path
+ *
+ * @param path - an initialised path
+ * @param q    - the configuration result
+ */
+int dubins_path_endpoint( DubinsPath* path, double q[3] );
+
+/**
+ * Convenience function to extract a subset of a path
+ *
+ * @param path    - an initialised path
+ * @param t       - a length measure, where 0 < t < dubins_path_length(path)
+ * @param newpath - the resultant path
+ */
+int dubins_extract_subpath( DubinsPath* path, double t, DubinsPath* newpath );
+
 // This group of function are only exposed for testing purposes only.
 // The names and declarations of these functions may change in future
-int dubins_init_normalised( double alpha, double beta, double d, DubinsPath* path );
+int dubins_init_normalised( double alpha, double beta, double d, double rho, DubinsPath* path );
 void dubins_LSL( double alpha, double beta, double d, double* outputs );
 void dubins_RSR( double alpha, double beta, double d, double* outputs );
 void dubins_LSR( double alpha, double beta, double d, double* outputs );
