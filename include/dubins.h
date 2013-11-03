@@ -1,15 +1,15 @@
-// Copyright (c) 2008-2010, Andrew Walker
-// 
+// Copyright (c) 2008-2013, Andrew Walker
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in
 // all copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,27 +25,22 @@
 #define EDUBPARAM     (2)   // Path parameterisitation error
 #define EDUBBADRHO    (3)   // the rho value is invalid
 
-// allow this code to interface with c-code
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-typedef struct 
+typedef struct
 {
     double qi[3];       // the initial configuration
     double param[3];    // the lengths of the three segments
-    double rho;         // model forward velocity / model angular velocity 
+    double rho;         // model forward velocity / model angular velocity
     int type;           // encoded representation of the segment types
 } DubinsPath;
 
 /**
  * Callback function for path sampling
- * 
+ *
  * @note the q parameter is a configuration
  * @note the t parameter is the distance along the path
  * @note return non-zero to denote sampling should be stopped
  */
-typedef int (*DubinsPathSamplingCallback)(double q[3], double t); 
+typedef int (*DubinsPathSamplingCallback)(double q[3], double t);
 
 /**
  * Generate a path from an initial configuration to
@@ -113,11 +108,6 @@ void dubins_LSR( double alpha, double beta, double d, double* outputs );
 void dubins_RSL( double alpha, double beta, double d, double* outputs );
 void dubins_LRL( double alpha, double beta, double d, double* outputs );
 void dubins_RLR( double alpha, double beta, double d, double* outputs );
-
-// allow this code to interface with c-code
-#ifdef __cplusplus
-} // extern "C"
-#endif
 
 #endif // DUBINS_H
 
