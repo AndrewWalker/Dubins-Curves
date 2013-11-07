@@ -1,5 +1,7 @@
 This software finds the shortest paths between configurations for the Dubin's car, the forward only car-like vehicle with a constrained turning radius. 
 
+![Samples](docs/images/samples.png)
+
 A good description of the equations and basic strategies for doing this are described in LaValle's book "Planning Algorithms" http://planning.cs.uiuc.edu/node821.html
 
 The approach adopted here is based on the algebraic solutions to the equations published by Shkel and Lumelsky "Classification of the Dubins set", however, rather than using the symmetry approach described in that work, a less efficient generate and test approach is used.
