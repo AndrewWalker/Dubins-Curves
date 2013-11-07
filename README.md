@@ -8,19 +8,19 @@ The approach adopted here is based on the algebraic solutions to the equations p
 
 Various revisions of this code have been used in:
 
-@phdthesis{ Walker:2011,
-    title  = "Hard Real-Time Motion Planning for Autonomous Vehicles",
-    author = "Andrew Walker",
-    school = "Swinburne University of Technology",
-    year   = "2011"
-}
+    @phdthesis{ Walker:2011,
+        title  = "Hard Real-Time Motion Planning for Autonomous Vehicles",
+        author = "Andrew Walker",
+        school = "Swinburne University of Technology",
+        year   = "2011"
+    }
 
 and in
 
-@phdthesis{ Smart:2008,
-    title  = "Evolutionary Control of Autonomous Underwater Vehicles", 
-    author = "Royce Smart",
-    school = "RMIT",
-    year   = "2008"
-}
+    @phdthesis{ Smart:2008,
+        title  = "Evolutionary Control of Autonomous Underwater Vehicles", 
+        author = "Royce Smart",
+        school = "RMIT",
+        year   = "2008"
+    }
 
