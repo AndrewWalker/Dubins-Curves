@@ -34,7 +34,7 @@ The following code snippet demonstrates how to generate intermediate points alon
 
 The following image shows some example paths, and the heading of the    vehicle at each of the intermediate configurations.
 
-.. image ./docs/images/samples.png
+.. image:: ./docs/images/samples.png
 
 
 License
