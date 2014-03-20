@@ -35,13 +35,6 @@
 #define EDUBBADRHO    (3)   // the rho value is invalid
 #define EDUBNOPATH    (4)   // no connection between configurations with this word
 
-int dubins_LSL( double alpha, double beta, double d, double* outputs );
-int dubins_RSR( double alpha, double beta, double d, double* outputs );
-int dubins_LSR( double alpha, double beta, double d, double* outputs );
-int dubins_RSL( double alpha, double beta, double d, double* outputs );
-int dubins_LRL( double alpha, double beta, double d, double* outputs );
-int dubins_RLR( double alpha, double beta, double d, double* outputs );
-
 // The various types of solvers for each of the path types
 typedef int (*DubinsWord)(double, double, double, double* );
 
@@ -123,6 +116,14 @@ int dubins_path_endpoint( DubinsPath* path, double q[3] );
  * @param newpath - the resultant path
  */
 int dubins_extract_subpath( DubinsPath* path, double t, DubinsPath* newpath );
+
+// Only exposed for testing purposes
+int dubins_LSL( double alpha, double beta, double d, double* outputs );
+int dubins_RSR( double alpha, double beta, double d, double* outputs );
+int dubins_LSR( double alpha, double beta, double d, double* outputs );
+int dubins_RSL( double alpha, double beta, double d, double* outputs );
+int dubins_LRL( double alpha, double beta, double d, double* outputs );
+int dubins_RLR( double alpha, double beta, double d, double* outputs );
 
 #endif // DUBINS_H
 
