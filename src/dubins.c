@@ -73,6 +73,35 @@ double mod2pi( double theta )
     return fmodr( theta, 2 * M_PI );
 }
 
+int dubins_init_normalised( double alpha, double beta, double d, DubinsPath* path)
+{
+    double best_cost;
+    int    best_word;
+    int    i;
+
+    best_word = -1;
+    for( i = 0; i < 6; i++ ) {
+        double params[3];
+        int err = dubins_words[i](alpha, beta, d, params);
+        if(err == EDUBOK) {
+            double cost = params[0] + params[1] + params[2];
+            if(cost < best_cost) {
+                best_word = i;
+                best_cost = cost;
+                path->param[0] = params[0];
+                path->param[1] = params[1];
+                path->param[2] = params[2];
+            }
+        }
+    }
+
+    if(best_word == -1) {
+        return EDUBNOPATH;
+    }
+    path->type = best_word;
+    return EDUBOK;
+}
+
 int dubins_init( double q0[3], double q1[3], double rho, DubinsPath* path )
 {
     int i;
@@ -186,35 +215,6 @@ int dubins_LRL( double alpha, double beta, double d, double* outputs )
     double t = mod2pi(-alpha - atan2( ca-cb, d+sa-sb ) + p/2.);
     double q = mod2pi(mod2pi(beta) - alpha -t + mod2pi(p));
     PACK_OUTPUTS( outputs );
-    return EDUBOK;
-}
-
-int dubins_init_normalised( double alpha, double beta, double d, DubinsPath* path)
-{
-    double best_cost;
-    int    best_word;
-    int    i;
-
-    best_word = -1;
-    for( i = 0; i < 6; i++ ) {
-        double params[3];
-        int err = dubins_words[i](alpha, beta, d, params);
-        if(err == EDUBOK) {
-            double cost = params[0] + params[1] + params[2];
-            if(cost < best_cost) {
-                best_word = i;
-                best_cost = cost;
-                path->param[0] = params[0];
-                path->param[1] = params[1];
-                path->param[2] = params[2];
-            }
-        }
-    }
-
-    if(best_word == -1) {
-        return EDUBNOPATH;
-    }
-    path->type = best_word;
     return EDUBOK;
 }
 
