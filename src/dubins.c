@@ -46,6 +46,15 @@ const int DIRDATA[][3] = {
     { L_SEG, R_SEG, L_SEG }
 };
 
+DubinsWord dubins_words[] = {
+    dubins_LSL,
+    dubins_LSR,
+    dubins_RSL,
+    dubins_RSR,
+    dubins_RLR,
+    dubins_LRL,
+};
+
 #define UNPACK_INPUTS(alpha, beta)     \
     double sa = sin(alpha);            \
     double sb = sin(beta);             \

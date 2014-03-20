@@ -45,14 +45,8 @@ int dubins_RLR( double alpha, double beta, double d, double* outputs );
 // The various types of solvers for each of the path types
 typedef int (*DubinsWord)(double, double, double, double* );
 
-DubinsWord dubins_words[] = {
-    dubins_LSL,
-    dubins_LSR,
-    dubins_RSL,
-    dubins_RSR,
-    dubins_RLR,
-    dubins_LRL,
-};
+// A complete list of the possible solvers that could give optimal paths 
+extern DubinsWord dubins_words[]; 
 
 typedef struct
 {
