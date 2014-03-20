@@ -113,11 +113,6 @@ int dubins_init( double q0[3], double q1[3], double rho, DubinsPath* path )
     if( rho <= 0. ) {
         return EDUBBADRHO;
     }
-    if( (fabs(dx) < EPSILON) && (fabs(dy) < EPSILON) ) {
-        // if the configurations are colocated, theta has no clear definition
-        // TODO test if you can get away with letting theta = 0
-        return EDUBCOCONFIGS;
-    }
     double theta = mod2pi(atan2( dy, dx ));
     double alpha = mod2pi(q0[2] - theta);
     double beta  = mod2pi(q1[2] - theta);
