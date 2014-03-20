@@ -1,14 +1,15 @@
 import os
 
-env = Environment(
-	ENV = os.environ,
-    CPPPATH = 'include'.split(),
-	CCFLAGS = '-g -Wall -O0'.split()
-	)
+env = Environment(ENV = os.environ)
+env.Append(CPPPATH = ['include'])
+env.Append(CCFLAGS = '-g -Wall -O0'.split())
+env.Append(LIBS    = ['m'])
+env.Append(RPATH   = '.')
+env.SharedLibrary('dubins', ['src/dubins.c'])
 
-env.SharedLibrary('dubinspaths', ['src/dubins.c'])
+appenv = env.Clone()
+appenv.Append(LIBS    = ['dubins'])
+appenv.Append(LIBPATH = ['.'])
+app = appenv.Program('test_dubins', ['ctests/main.c'])
 
-env.Program('dubinstest', ['ctests/main.c'],
-            LIBS=['dubinspaths','m'],
-            LIBPATH='.',
-            RPATH='.')
+Depends(app, 'libdubins.so')
