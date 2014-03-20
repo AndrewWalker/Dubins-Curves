@@ -35,6 +35,25 @@
 #define EDUBBADRHO    (3)   // the rho value is invalid
 #define EDUBNOPATH    (4)   // no connection between configurations with this word
 
+int dubins_LSL( double alpha, double beta, double d, double* outputs );
+int dubins_RSR( double alpha, double beta, double d, double* outputs );
+int dubins_LSR( double alpha, double beta, double d, double* outputs );
+int dubins_RSL( double alpha, double beta, double d, double* outputs );
+int dubins_LRL( double alpha, double beta, double d, double* outputs );
+int dubins_RLR( double alpha, double beta, double d, double* outputs );
+
+// The various types of solvers for each of the path types
+typedef int (*DubinsWord)(double, double, double, double* );
+
+DubinsWord dubins_words[] = {
+    dubins_LSL,
+    dubins_LSR,
+    dubins_RSL,
+    dubins_RSR,
+    dubins_RLR,
+    dubins_LRL,
+};
+
 typedef struct
 {
     double qi[3];       // the initial configuration
@@ -59,9 +78,9 @@ typedef int (*DubinsPathSamplingCallback)(double q[3], double t);
  *
  * @param q0    - a configuration specified as an array of x, y, theta
  * @param q1    - a configuration specified as an array of x, y, theta
- * @param rho   - forward velocity of the vehicle divided by maximum angular velocity
+ * @param rho   - turning radius of the vehicle (forward velocity divided by maximum angular velocity)
  * @param path  - the resultant path
- * @return      - 0 on success
+ * @return      - non-zero on error
  */
 int dubins_init( double q0[3], double q1[3], double rho, DubinsPath* path);
 
@@ -108,17 +127,6 @@ int dubins_path_endpoint( DubinsPath* path, double q[3] );
  * @param newpath - the resultant path
  */
 int dubins_extract_subpath( DubinsPath* path, double t, DubinsPath* newpath );
-
-// This group of function are only exposed for testing purposes only.
-// The names and declarations of these functions may change in future
-int dubins_init_normalised( double alpha, double beta, double d, double rho, DubinsPath* path );
-
-int dubins_LSL( double alpha, double beta, double d, double* outputs );
-int dubins_RSR( double alpha, double beta, double d, double* outputs );
-int dubins_LSR( double alpha, double beta, double d, double* outputs );
-int dubins_RSL( double alpha, double beta, double d, double* outputs );
-int dubins_LRL( double alpha, double beta, double d, double* outputs );
-int dubins_RLR( double alpha, double beta, double d, double* outputs );
 
 #endif // DUBINS_H
 
