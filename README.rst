@@ -36,11 +36,11 @@ The following image shows some example paths, and the heading of the    vehicle 
 
 .. image:: ./docs/images/samples.png
 
+Other Version
+=============
 
-License
-=======
-
-MIT License. See `LICENSE.txt <LICENSE.txt>`_ for details.
+* There is a MATLAB Mex wrapper of this code on the `MathWorks FileExchange <http://www.mathworks.com.au/matlabcentral/fileexchange/40655-dubins-curve-mex>`_
+* There is a Python wrapper of this code available on `GitHub <https://github.com/AndrewWalker/pydubins>`_ and on `PyPI <https://pypi.python.org/pypi/dubins/>`_
 
 Citing
 ======
@@ -66,10 +66,16 @@ Here’s an example of a BibTeX entry:
 Contributions
 =============
 
-This work was completed as part of my PhD thesis [Walker11]_. 
+This work was completed as part of [Walker11]_. 
 
-* Francis Valentinis 
+* Francis Valentinis
 * Royce Smart - who tested early versions of this code while writing up [Smart08]_.
+* Scott Teuscher - who wrote the MATLAB Mex wrapper
+
+License
+=======
+
+MIT License. See `LICENSE.txt <LICENSE.txt>`_ for details.
 
 References
 ==========
@@ -77,7 +83,7 @@ References
 .. [Dubins51] Dubins, L.E. (July 1957). "On Curves of Minimal Length with a Constraint on Average Curvature, and with Prescribed Initial and Terminal Positions and Tangents". American Journal of Mathematics 79 (3): 497–516
 .. [LaValle06] LaValle, S. M. (2006). "Planning Algorithms". Cambridge University Press
 .. [Shkel01] Shkel, A. M. and Lumelsky, V. (2001). "Classification of the Dubins set". Robotics and Autonomous Systems 34 (2001) 179–202
-.. [Walker11] Walker, A. (2011). "Hard Real-Time Motion Planning for Autonomous Vehicles", Swinburne University.
-.. [Smart08] Royce, S. (2008). "Evolutionary Control of Autonomous Underwater Vehicles". RMIT
+.. [Walker11] Walker, A. (2011). "Hard Real-Time Motion Planning for Autonomous Vehicles", PhD thesis, Swinburne University.
+.. [Smart08] Royce, S. (2008). "Evolutionary Control of Autonomous Underwater Vehicles". PhD thesis, RMIT
 
 
