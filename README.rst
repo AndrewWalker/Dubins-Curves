@@ -40,7 +40,7 @@ The following image shows some example paths, and the heading of the    vehicle 
 License
 =======
 
-MIT License. See LICENSE.txt for more details.
+MIT License. See `LICENSE.txt <LICENSE.txt>`_ for details.
 
 Citing
 ======
