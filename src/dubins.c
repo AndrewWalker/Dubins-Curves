@@ -75,7 +75,7 @@ double mod2pi( double theta )
 
 int dubins_init_normalised( double alpha, double beta, double d, DubinsPath* path)
 {
-    double best_cost;
+    double best_cost = INFINITY;
     int    best_word;
     int    i;
 
@@ -91,6 +91,7 @@ int dubins_init_normalised( double alpha, double beta, double d, DubinsPath* pat
                 path->param[0] = params[0];
                 path->param[1] = params[1];
                 path->param[2] = params[2];
+                path->type = i;
             }
         }
     }
