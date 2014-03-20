@@ -50,7 +50,7 @@ If you would like to cite this library in a paper or presentation, the following
 * **Author:** Andrew Walker
 * **Title:** Dubins-Curves: an open implementation of shortest paths for the forward only car
 * **Year:** 2008 -
-* **URL:** `https://github.com/AndrewWalker/Dubins-Curves`_
+* **URL:** `https://github.com/AndrewWalker/Dubins-Curves`
 
 Here’s an example of a BibTeX entry:
 
