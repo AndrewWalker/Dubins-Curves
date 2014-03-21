@@ -64,6 +64,9 @@ typedef int (*DubinsPathSamplingCallback)(double q[3], double t, void* user_data
  * a target configuration, with a specified maximum turning
  * radii
  *
+ * A configuration is (x, y, theta), where theta is in radians, with zero
+ * along the line x = 0, and counter-clockwise is positive
+ *
  * @param q0    - a configuration specified as an array of x, y, theta
  * @param q1    - a configuration specified as an array of x, y, theta
  * @param rho   - turning radius of the vehicle (forward velocity divided by maximum angular velocity)
