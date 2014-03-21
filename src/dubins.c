@@ -233,6 +233,10 @@ double dubins_path_length( DubinsPath* path )
     return length;
 }
 
+int dubins_path_type( DubinsPath* path ) {
+    return path->type;
+}
+
 void dubins_segment( double t, double qi[3], double qt[3], int type)
 {
     assert( type == L_SEG || type == S_SEG || type == R_SEG );

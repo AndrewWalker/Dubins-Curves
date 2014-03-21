@@ -80,6 +80,14 @@ int dubins_init( double q0[3], double q1[3], double rho, DubinsPath* path);
 double dubins_path_length( DubinsPath* path );
 
 /**
+ * Extract an integer that represents which path type was used
+ *
+ * @param path    - an initialised path
+ * @return        - one of LSL, LSR, RSL, RSR, RLR or LRL (ie/ 0-5 inclusive)
+ */
+int dubins_path_type( DubinsPath * path );
+
+/**
  * Calculate the configuration along the path, using the parameter t
  *
  * @param path - an initialised path
