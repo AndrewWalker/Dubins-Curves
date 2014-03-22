@@ -1,4 +1,7 @@
-=====
+=============
+Dubins-Curves
+=============
+
 About
 =====
 
@@ -56,7 +59,7 @@ Here’s an example of a BibTeX entry:
 
 .. code-block:: bibtex
 
-    @Misc{,
+    @Misc{DubinsCurves,
       author = {Andrew Walker},
       title  = {Dubins-Curves: an open implementation of shortest paths for the forward only car},
       year   = {2008--},
