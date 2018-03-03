@@ -1,4 +1,4 @@
-// Copyright (c) 2008-2014, Andrew Walker
+// Copyright (c) 2008-2018, Andrew Walker
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -45,7 +45,7 @@ int main()
     {
         /* display information about the best path */
         DubinsPath path;
-        int err = dubins_init(q0, q1, turning_radius, &path);
+        int err = dubins_shortest_path(&path, q0, q1, turning_radius);
         assert(err == 0);
         printf("# best = %d = %s\n", path.type, names[path.type]);
     }
