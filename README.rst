@@ -30,8 +30,8 @@ The following code snippet demonstrates how to generate intermediate points alon
         double q1[] = { 4,4,3.142 };
         double turning_radius = 1.0;
         DubinsPath path;
-        dubins_init( q0, q1, turning_radius, &path);
-        dubins_path_sample_many( &path, printConfiguration, 0.1, NULL);
+        dubins_init( &path, q0, q1, turning_radius,);
+        dubins_path_sample_many( &path, 0.1, printConfiguration, NULL);
         return 0;
     }
 
