@@ -30,10 +30,10 @@ int main()
     double q0[] = { 0,0,0 };
     double q1[] = { 4,4,3.142 };
     DubinsPath path;
-    dubins_init( q0, q1, 1.0, &path);
+    dubins_shortest_path(&path, q0, q1, 1.0);
 
     printf("#x,y,theta,t\n");
-    dubins_path_sample_many( &path, printConfiguration, 0.1, NULL);
+    dubins_path_sample_many(&path,  0.1, printConfiguration, NULL);
 
     return 0;
 }
