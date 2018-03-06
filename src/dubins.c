@@ -143,7 +143,26 @@ double dubins_path_length( DubinsPath* path )
     return length;
 }
 
-DubinsPathType dubins_path_type( DubinsPath* path ) {
+double dubins_segment_length( DubinsPath* path, int i )
+{
+    if( (i < 0) || (i > 2) )
+    {
+        return INFINITY;
+    }
+    return path->param[i] * path->rho;
+}
+
+double dubins_segment_length_normalized( DubinsPath* path, int i )
+{
+    if( (i < 0) || (i > 2) )
+    {
+        return INFINITY;
+    }
+    return path->param[i];
+} 
+
+DubinsPathType dubins_path_type( DubinsPath* path ) 
+{
     return path->type;
 }
 
