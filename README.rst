@@ -16,6 +16,15 @@ The approach used to find paths is based on the algebraic solutions published
 in [Shkel01]_. However, rather than using angular symmetries to improve
 performance, the simpler approach to test all possible solutions is used here. 
 
+Usage
+=====
+
+The recommended approach is to add `dubins.c` and `dubins.h` to your project
+and compile with an appropriate build system.  
+
+The repository includes a basic cmake example that demonstrates how to build
+and test the library.
+
 Examples
 ========
 
@@ -38,7 +47,7 @@ along the shortest path between a pair of configuration (x, y, theta).
         double q1[] = { 4,4,3.142 };
         double turning_radius = 1.0;
         DubinsPath path;
-        dubins_init( &path, q0, q1, turning_radius);
+        dubins_shortest_path( &path, q0, q1, turning_radius);
         dubins_path_sample_many( &path, 0.1, printConfiguration, NULL);
         return 0;
     }
@@ -59,13 +68,6 @@ Citing
 
 If you would like to cite this library in a paper or presentation, the following is recommended:
 
-* **Author:** Andrew Walker
-* **Title:** Dubins-Curves: an open implementation of shortest paths for the forward only car
-* **Year:** 2008 -
-* **URL:** `https://github.com/AndrewWalker/Dubins-Curves`
-
-Here’s an example of a BibTeX entry:
-
 .. code-block:: bibtex
 
     @Misc{DubinsCurves,
@@ -75,10 +77,13 @@ Here’s an example of a BibTeX entry:
       url    = "https://github.com/AndrewWalker/Dubins-Curves"
     }
 
-Contributions
-=============
+Contributors
+============
 
-This work was completed as part of [Walker11]_. 
+The Dubin's curves library was completed as one small part of [Walker11]_. New
+contributions or bug fixes are welcome.
+
+Key contributors to the project include: 
 
 * Francis Valentinis
 * Royce Smart - who tested early versions of this code while writing up [Smart08]_.

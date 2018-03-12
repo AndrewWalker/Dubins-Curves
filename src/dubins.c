@@ -266,6 +266,10 @@ int dubins_path_endpoint( DubinsPath* path, double q[3] )
 
 int dubins_extract_subpath( DubinsPath* path, double t, DubinsPath* newpath )
 {
+    if((t < 0) || (t > dubins_path_length(path)))
+    {
+        return EDUBPARAM; 
+    }
     // calculate the true parameter
     double tprime = t / path->rho;
 
@@ -293,7 +297,12 @@ int dubins_intermediate_results(DubinsIntermediateResults* in, double q0[3], dou
     double dy = q1[1] - q0[1];
     double D = sqrt( dx * dx + dy * dy );
     double d = D / rho;
-    double theta = mod2pi(atan2( dy, dx ));
+    double theta = 0;
+
+    // test required to prevent domain errors if dx=0 and dy=0
+    if(d > 0) {
+        theta = mod2pi(atan2( dy, dx ));
+    }
     double alpha = mod2pi(q0[2] - theta);
     double beta  = mod2pi(q1[2] - theta);
 
@@ -372,10 +381,11 @@ int dubins_RSL(DubinsIntermediateResults* in, double out[3])
 
 int dubins_RLR(DubinsIntermediateResults* in, double out[3]) 
 {
-    double tmp0  = (6. - in->d_sq + 2*in->c_ab + 2*in->d*(in->sa - in->sb)) / 8.;
+    double tmp0 = (6. - in->d_sq + 2*in->c_ab + 2*in->d*(in->sa - in->sb)) / 8.;
+    double phi  = atan2( in->ca - in->cb, in->d - in->sa + in->sb );
     if( fabs(tmp0) <= 1) {
-        double p = mod2pi(2*M_PI - acos(tmp0) );
-        double t = mod2pi(in->alpha - atan2( in->ca - in->cb, in->d - in->sa + in->sb ) + mod2pi(p/2.));
+        double p = mod2pi((2*M_PI) - acos(tmp0) );
+        double t = mod2pi(in->alpha - phi + mod2pi(p/2.));
         out[0] = t;
         out[1] = p;
         out[2] = mod2pi(in->alpha - in->beta - t + mod2pi(p));
@@ -386,10 +396,11 @@ int dubins_RLR(DubinsIntermediateResults* in, double out[3])
 
 int dubins_LRL(DubinsIntermediateResults* in, double out[3])
 {
-    double tmp_lrl = (6. - in->d_sq + 2*in->c_ab + 2*in->d*(in->sb - in->sa)) / 8.;
-    if( fabs(tmp_lrl) <= 1) {
-        double p = mod2pi( 2*M_PI - acos( tmp_lrl ) );
-        double t = mod2pi(-in->alpha - atan2( in->ca - in->cb, in->d + in->sa - in->sb ) + p/2.);
+    double tmp0 = (6. - in->d_sq + 2*in->c_ab + 2*in->d*(in->sb - in->sa)) / 8.;
+    double phi = atan2( in->ca - in->cb, in->d + in->sa - in->sb );
+    if( fabs(tmp0) <= 1) {
+        double p = mod2pi( 2*M_PI - acos( tmp0) );
+        double t = mod2pi(-in->alpha - phi + p/2.);
         out[0] = t;
         out[1] = p;
         out[2] = mod2pi(mod2pi(in->beta) - in->alpha -t + mod2pi(p));

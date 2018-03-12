@@ -1,5 +1,13 @@
 cmake_minimum_required(VERSION 3.0)
 
+if (CMAKE_COMPILER_IS_GNUCC)
+  option(ENABLE_COVERAGE "Enable coverage reporting for gcc/clang" FALSE)
+
+  if (ENABLE_COVERAGE)
+    add_compile_options(--coverage -O0)
+  endif()
+endif()
+
 add_subdirectory(3rd_party/google-test)
 
 add_library(dubins 
@@ -12,6 +20,8 @@ target_include_directories(dubins
 target_link_libraries(dubins 
     PUBLIC 
     m)
+target_link_libraries(dubins PRIVATE --coverage)
+
 
 enable_testing()
 
@@ -23,5 +33,6 @@ target_link_libraries(unittest_dubins
     dubins
     GTest::Main
     GTest::GTest)
+target_link_libraries(unittest_dubins --coverage)
 
 add_test(unittest_dubins unittest_dubins)
