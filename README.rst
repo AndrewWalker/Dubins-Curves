@@ -5,14 +5,22 @@ Dubins-Curves
 About
 =====
 
-This software finds the shortest paths between configurations for the Dubins' car [Dubins51]_, the forward only car-like vehicle with a constrained turning radius. A good description of the equations and basic strategies for doing this are described in section 15.3.1 `"Dubins Curves" <http://planning.cs.uiuc.edu/node821.html>`_ of the book "Planning Algorithms" [LaValle06]_.
+This software finds the shortest paths between configurations for the Dubins'
+car [Dubins51]_, the forward only car-like vehicle with a constrained turning
+radius. A good description of the equations and basic strategies for doing this
+are described in section 15.3.1 `"Dubins Curves"
+<http://planning.cs.uiuc.edu/node821.html>`_ of the book "Planning Algorithms"
+[LaValle06]_.
 
-The approach used to find paths is based on the algebraic solutions published in [Shkel01]_. However, rather than using angular symmetries to improve performance, the simpler approach to test all possible solutions is used here. 
+The approach used to find paths is based on the algebraic solutions published
+in [Shkel01]_. However, rather than using angular symmetries to improve
+performance, the simpler approach to test all possible solutions is used here. 
 
 Examples
 ========
 
-The following code snippet demonstrates how to generate intermediate points along the shortest path between a pair of configuration (x, y, theta).
+The following code snippet demonstrates how to generate intermediate points
+along the shortest path between a pair of configuration (x, y, theta).
 
 .. code-block:: c
 
@@ -30,12 +38,13 @@ The following code snippet demonstrates how to generate intermediate points alon
         double q1[] = { 4,4,3.142 };
         double turning_radius = 1.0;
         DubinsPath path;
-        dubins_init( &path, q0, q1, turning_radius,);
+        dubins_init( &path, q0, q1, turning_radius);
         dubins_path_sample_many( &path, 0.1, printConfiguration, NULL);
         return 0;
     }
 
-The following image shows some example paths, and the heading of the    vehicle at each of the intermediate configurations.
+The following image shows some example paths, and the heading of the vehicle at
+each of the intermediate configurations.
 
 .. image:: ./docs/images/samples.png
 

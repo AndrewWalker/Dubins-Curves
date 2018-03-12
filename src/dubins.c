@@ -17,9 +17,11 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-
-#include "dubins.h"
+#ifdef WIN32
+#define _USE_MATH_DEFINES
+#endif
 #include <math.h>
+#include "dubins.h"
 
 #define EPSILON (10e-10)
 
@@ -192,7 +194,7 @@ void dubins_segment( double t, double qi[3], double qt[3], SegmentType type)
 
 int dubins_path_sample( DubinsPath* path, double t, double q[3] )
 {
-    if( t < 0 || t >= dubins_path_length(path) ) {
+    if( t < 0 || t > dubins_path_length(path) ) {
         // error, parameter out of bounds
         return EDUBPARAM;
     }
@@ -236,16 +238,16 @@ int dubins_path_sample( DubinsPath* path, double t, double q[3] )
     q[1] = q[1] * path->rho + path->qi[1];
     q[2] = mod2pi(q[2]);
 
-    return 0;
+    return EDUBOK;
 }
 
 int dubins_path_sample_many(DubinsPath* path, double stepSize, 
                             DubinsPathSamplingCallback cb, void* user_data)
 {
+    double q[3];
     double x = 0.0;
     double length = dubins_path_length(path);
     while( x <  length ) {
-        double q[3];
         dubins_path_sample( path, x, q );
         int retcode = cb(q, x, user_data);
         if( retcode != 0 ) {
