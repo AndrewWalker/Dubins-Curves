@@ -47,7 +47,7 @@ along the shortest path between a pair of configuration (x, y, theta).
         double q1[] = { 4,4,3.142 };
         double turning_radius = 1.0;
         DubinsPath path;
-        dubins_init( &path, q0, q1, turning_radius);
+        dubins_shortest_path( &path, q0, q1, turning_radius);
         dubins_path_sample_many( &path, 0.1, printConfiguration, NULL);
         return 0;
     }
