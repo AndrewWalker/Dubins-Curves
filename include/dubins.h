@@ -111,7 +111,7 @@ double dubins_segment_length_normalized( DubinsPath* path, int i );
  * Extract an integer that represents which path type was used
  *
  * @param path    - an initialised path
- * @return        - one of LSL, LSR, RSL, RSR, RLR or LRL (ie/ 0-5 inclusive)
+ * @return        - one of LSL, LSR, RSL, RSR, RLR or LRL 
  */
 DubinsPathType dubins_path_type(DubinsPath* path);
 
@@ -129,10 +129,14 @@ int dubins_path_sample(DubinsPath* path, double t, double q[3]);
  * Walk along the path at a fixed sampling interval, calling the
  * callback function at each interval
  *
+ * The sampling process continues until the whole path is sampled, or the callback returns a non-zero value
+ *
  * @param path      - the path to sample
+ * @param stepSize  - the distance along the path for subsequent samples
  * @param cb        - the callback function to call for each sample
  * @param user_data - optional information to pass on to the callback
- * @param stepSize  - the distance along the path for subsequent samples
+ *
+ * @returns - zero on successful completion, or the result of the callback
  */
 int dubins_path_sample_many(DubinsPath* path, 
                             double stepSize, 
