@@ -1,22 +1,24 @@
-// Copyright (c) 2008-2018, Andrew Walker
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-// THE SOFTWARE.
+/*
+ * Copyright (c) 2008-2018, Andrew Walker
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 #ifndef DUBINS_H
 #define DUBINS_H
 
@@ -32,18 +34,21 @@ typedef enum
 
 typedef struct 
 {
-    double qi[3];        // the initial configuration
-    double param[3];     // the lengths of the three segments
-    double rho;          // model forward velocity / model angular velocity
-    DubinsPathType type; // path type. one of LSL, LSR, ...
+    /* the initial configuration */
+    double qi[3];        
+    /* the lengths of the three segments */
+    double param[3];     
+    /* model forward velocity / model angular velocity */
+    double rho;          
+    // the path type described */
+    DubinsPathType type; 
 } DubinsPath;
 
-// Error codes
-#define EDUBOK        (0)   // No error
-#define EDUBCOCONFIGS (1)   // Colocated configurations
-#define EDUBPARAM     (2)   // Path parameterisitation error
-#define EDUBBADRHO    (3)   // the rho value is invalid
-#define EDUBNOPATH    (4)   // no connection between configurations with this word
+#define EDUBOK        (0)   /* No error */
+#define EDUBCOCONFIGS (1)   /* Colocated configurations */
+#define EDUBPARAM     (2)   /* Path parameterisitation error */
+#define EDUBBADRHO    (3)   /* the rho value is invalid */
+#define EDUBNOPATH    (4)   /* no connection between configurations with this word */
 
 /**
  * Callback function for path sampling
@@ -161,5 +166,5 @@ int dubins_path_endpoint(DubinsPath* path, double q[3]);
 int dubins_extract_subpath(DubinsPath* path, double t, DubinsPath* newpath);
 
 
-#endif // DUBINS_H
+#endif /* DUBINS_H */
 

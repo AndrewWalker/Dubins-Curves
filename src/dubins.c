@@ -1,22 +1,24 @@
-// Copyright (c) 2008-2018, Andrew Walker
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-// THE SOFTWARE.
+/*
+ * Copyright (c) 2008-2018, Andrew Walker
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 #ifdef WIN32
 #define _USE_MATH_DEFINES
 #endif
@@ -32,7 +34,7 @@ typedef enum
     R_SEG = 2
 } SegmentType;
 
-// The segment types for each of the Path types
+/* The segment types for each of the Path types */
 const SegmentType DIRDATA[][3] = {
     { L_SEG, S_SEG, L_SEG },
     { L_SEG, S_SEG, R_SEG },
@@ -195,11 +197,11 @@ void dubins_segment( double t, double qi[3], double qt[3], SegmentType type)
 
 int dubins_path_sample( DubinsPath* path, double t, double q[3] )
 {
-    // tprime is the normalised variant of the parameter t
+    /* tprime is the normalised variant of the parameter t */
     double tprime = t / path->rho;
-    double qi[3]; // The translated initial configuration
-    double q1[3]; // end-of segment 1
-    double q2[3]; // end-of segment 2
+    double qi[3]; /* The translated initial configuration */
+    double q1[3]; /* end-of segment 1 */
+    double q2[3]; /* end-of segment 2 */
     const SegmentType* types = DIRDATA[path->type];
     double p1, p2;
 
@@ -208,22 +210,12 @@ int dubins_path_sample( DubinsPath* path, double t, double q[3] )
         return EDUBPARAM;
     }
 
-
-    // In order to take rho != 1 into account this function needs to be more complex
-    // than it would be otherwise. The transformation is done in five stages.
-    //
-    // 1. translate the components of the initial configuration to the origin
-    // 2. generate the target configuration
-    // 3. transform the target configuration
-    //      scale the target configuration
-    //      translate the target configration back to the original starting point
-    //      normalise the target configurations angular component
-
+    /* initial configuration */
     qi[0] = 0.0;
     qi[1] = 0.0;
     qi[2] = path->qi[2];
 
-    // Generate the target configuration
+    /* generate the target configuration */
     p1 = path->param[0];
     p2 = path->param[1];
     dubins_segment( p1,      qi,    q1, types[0] );
@@ -238,7 +230,7 @@ int dubins_path_sample( DubinsPath* path, double t, double q[3] )
         dubins_segment( tprime-p1-p2, q2, q,  types[2] );
     }
 
-    // scale the target configuration, translate back to the original starting point
+    /* scale the target configuration, translate back to the original starting point */
     q[0] = q[0] * path->rho + path->qi[0];
     q[1] = q[1] * path->rho + path->qi[1];
     q[2] = mod2pi(q[2]);
@@ -266,13 +258,12 @@ int dubins_path_sample_many(DubinsPath* path, double stepSize,
 
 int dubins_path_endpoint( DubinsPath* path, double q[3] )
 {
-    // TODO - introduce a new constant rather than just using EPSILON
     return dubins_path_sample( path, dubins_path_length(path) - EPSILON, q );
 }
 
 int dubins_extract_subpath( DubinsPath* path, double t, DubinsPath* newpath )
 {
-    // calculate the true parameter
+    /* calculate the true parameter */
     double tprime = t / path->rho;
 
     if((t < 0) || (t > dubins_path_length(path)))
@@ -280,14 +271,14 @@ int dubins_extract_subpath( DubinsPath* path, double t, DubinsPath* newpath )
         return EDUBPARAM; 
     }
 
-    // copy most of the data
+    /* copy most of the data */
     newpath->qi[0] = path->qi[0];
     newpath->qi[1] = path->qi[1];
     newpath->qi[2] = path->qi[2];
     newpath->rho   = path->rho;
     newpath->type  = path->type;
 
-    // fix the parameters
+    /* fix the parameters */
     newpath->param[0] = fmin( path->param[0], tprime );
     newpath->param[1] = fmin( path->param[1], tprime - newpath->param[0]);
     newpath->param[2] = fmin( path->param[2], tprime - newpath->param[0] - newpath->param[1]);
@@ -307,7 +298,7 @@ int dubins_intermediate_results(DubinsIntermediateResults* in, double q0[3], dou
     d = D / rho;
     theta = 0;
 
-    // test required to prevent domain errors if dx=0 and dy=0
+    /* test required to prevent domain errors if dx=0 and dy=0 */
     if(d > 0) {
         theta = mod2pi(atan2( dy, dx ));
     }
