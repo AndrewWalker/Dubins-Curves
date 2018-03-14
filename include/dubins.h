@@ -27,7 +27,7 @@ typedef enum
     RSL = 2,
     RSR = 3,
     RLR = 4,
-    LRL = 5,
+    LRL = 5
 } DubinsPathType;
 
 typedef struct 

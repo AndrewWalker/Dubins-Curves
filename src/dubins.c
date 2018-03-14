@@ -76,27 +76,28 @@ double mod2pi( double theta )
 
 int dubins_shortest_path(DubinsPath* path, double q0[3], double q1[3], double rho)
 {
-    int errcode;
+    int i, errcode;
     DubinsIntermediateResults in;
+    double params[3];
+    double cost;
+    double best_cost = INFINITY;
+    int best_word = -1;
     errcode = dubins_intermediate_results(&in, q0, q1, rho);
     if(errcode != EDUBOK) {
         return errcode;
     }
 
-    double params[3];
 
     path->qi[0] = q0[0];
     path->qi[1] = q0[1];
     path->qi[2] = q0[2];
     path->rho = rho;
  
-    double best_cost = INFINITY;
-    int best_word = -1;
-    for( int i = 0; i < 6; i++ ) {
+    for( i = 0; i < 6; i++ ) {
         DubinsPathType pathType = (DubinsPathType)i;
         errcode = dubins_word(&in, pathType, params);
         if(errcode == EDUBOK) {
-            double cost = params[0] + params[1] + params[2];
+            cost = params[0] + params[1] + params[2];
             if(cost < best_cost) {
                 best_word = i;
                 best_cost = cost;
@@ -194,13 +195,19 @@ void dubins_segment( double t, double qi[3], double qt[3], SegmentType type)
 
 int dubins_path_sample( DubinsPath* path, double t, double q[3] )
 {
+    // tprime is the normalised variant of the parameter t
+    double tprime = t / path->rho;
+    double qi[3]; // The translated initial configuration
+    double q1[3]; // end-of segment 1
+    double q2[3]; // end-of segment 2
+    const SegmentType* types = DIRDATA[path->type];
+    double p1, p2;
+
     if( t < 0 || t > dubins_path_length(path) ) {
         // error, parameter out of bounds
         return EDUBPARAM;
     }
 
-    // tprime is the normalised variant of the parameter t
-    double tprime = t / path->rho;
 
     // In order to take rho != 1 into account this function needs to be more complex
     // than it would be otherwise. The transformation is done in five stages.
@@ -212,15 +219,13 @@ int dubins_path_sample( DubinsPath* path, double t, double q[3] )
     //      translate the target configration back to the original starting point
     //      normalise the target configurations angular component
 
-    // The translated initial configuration
-    double qi[3] = { 0, 0, path->qi[2] };
+    qi[0] = 0.0;
+    qi[1] = 0.0;
+    qi[2] = path->qi[2];
 
     // Generate the target configuration
-    const SegmentType* types = DIRDATA[path->type];
-    double p1 = path->param[0];
-    double p2 = path->param[1];
-    double q1[3]; // end-of segment 1
-    double q2[3]; // end-of segment 2
+    p1 = path->param[0];
+    p2 = path->param[1];
     dubins_segment( p1,      qi,    q1, types[0] );
     dubins_segment( p2,      q1,    q2, types[1] );
     if( tprime < p1 ) {
@@ -244,12 +249,13 @@ int dubins_path_sample( DubinsPath* path, double t, double q[3] )
 int dubins_path_sample_many(DubinsPath* path, double stepSize, 
                             DubinsPathSamplingCallback cb, void* user_data)
 {
+    int retcode;
     double q[3];
     double x = 0.0;
     double length = dubins_path_length(path);
     while( x <  length ) {
         dubins_path_sample( path, x, q );
-        int retcode = cb(q, x, user_data);
+        retcode = cb(q, x, user_data);
         if( retcode != 0 ) {
             return retcode;
         }
@@ -266,12 +272,13 @@ int dubins_path_endpoint( DubinsPath* path, double q[3] )
 
 int dubins_extract_subpath( DubinsPath* path, double t, DubinsPath* newpath )
 {
+    // calculate the true parameter
+    double tprime = t / path->rho;
+
     if((t < 0) || (t > dubins_path_length(path)))
     {
         return EDUBPARAM; 
     }
-    // calculate the true parameter
-    double tprime = t / path->rho;
 
     // copy most of the data
     newpath->qi[0] = path->qi[0];
@@ -289,22 +296,23 @@ int dubins_extract_subpath( DubinsPath* path, double t, DubinsPath* newpath )
 
 int dubins_intermediate_results(DubinsIntermediateResults* in, double q0[3], double q1[3], double rho)
 {
+    double dx, dy, D, d, theta, alpha, beta;
     if( rho <= 0.0 ) {
         return EDUBBADRHO;
     }
 
-    double dx = q1[0] - q0[0];
-    double dy = q1[1] - q0[1];
-    double D = sqrt( dx * dx + dy * dy );
-    double d = D / rho;
-    double theta = 0;
+    dx = q1[0] - q0[0];
+    dy = q1[1] - q0[1];
+    D = sqrt( dx * dx + dy * dy );
+    d = D / rho;
+    theta = 0;
 
     // test required to prevent domain errors if dx=0 and dy=0
     if(d > 0) {
         theta = mod2pi(atan2( dy, dx ));
     }
-    double alpha = mod2pi(q0[2] - theta);
-    double beta  = mod2pi(q1[2] - theta);
+    alpha = mod2pi(q0[2] - theta);
+    beta  = mod2pi(q1[2] - theta);
 
     in->alpha = alpha;
     in->beta  = beta;
