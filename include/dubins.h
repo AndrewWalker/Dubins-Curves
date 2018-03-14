@@ -79,7 +79,7 @@ int dubins_shortest_path(DubinsPath* path, double q0[3], double q1[3], double rh
  * @param q0       - a configuration specified as an array of x, y, theta
  * @param q1       - a configuration specified as an array of x, y, theta
  * @param rho      - turning radius of the vehicle (forward velocity divided by maximum angular velocity)
- * @param pathType - the 
+ * @param pathType - the specific path type to use
  * @return         - non-zero on error
  */
 int dubins_path(DubinsPath* path, double q0[3], double q1[3], double rho, DubinsPathType pathType);
