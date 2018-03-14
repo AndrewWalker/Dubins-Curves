@@ -40,7 +40,7 @@ typedef struct
     double param[3];     
     /* model forward velocity / model angular velocity */
     double rho;          
-    // the path type described */
+    /* the path type described */
     DubinsPathType type; 
 } DubinsPath;
 

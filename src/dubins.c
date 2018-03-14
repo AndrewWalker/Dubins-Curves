@@ -206,7 +206,6 @@ int dubins_path_sample( DubinsPath* path, double t, double q[3] )
     double p1, p2;
 
     if( t < 0 || t > dubins_path_length(path) ) {
-        // error, parameter out of bounds
         return EDUBPARAM;
     }
 
