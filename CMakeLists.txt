@@ -22,6 +22,11 @@ target_link_libraries(dubins
     m)
 target_link_libraries(dubins PRIVATE --coverage)
 
+if (MSVC)
+    target_compile_options(dubins PRIVATE /W3)
+else()
+    target_compile_options(dubins PRIVATE -Wall -Wextra -Wpedantic -std=gnu89)
+endif()
 
 enable_testing()
 
