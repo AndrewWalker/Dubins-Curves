@@ -430,6 +430,8 @@ int dubins_word(DubinsIntermediateResults* in, DubinsPathType pathType, double o
     case RLR:
         result = dubins_RLR(in, out);
         break;
+    default:
+        result = EDUBNOPATH;
     }
     return result;
 }
