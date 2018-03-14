@@ -16,6 +16,8 @@ The approach used to find paths is based on the algebraic solutions published
 in [Shkel01]_. However, rather than using angular symmetries to improve
 performance, the simpler approach to test all possible solutions is used here. 
 
+|build_status| |coverage| |license|
+
 Usage
 =====
 
@@ -103,4 +105,14 @@ References
 .. [Walker11] Walker, A. (2011). "Hard Real-Time Motion Planning for Autonomous Vehicles", PhD thesis, Swinburne University.
 .. [Smart08] Royce, S. (2008). "Evolutionary Control of Autonomous Underwater Vehicles". PhD thesis, RMIT
 
+.. |build_status| image:: https://secure.travis-ci.org/AndrewWalker/Dubins-Curves.png?branch=master
+   :target: https://travis-ci.org/AndrewWalker/Dubins-Curves
+   :alt: Current build status
 
+.. |coverage| image:: https://codecov.io/gh/AndrewWalker/Dubins-Curves/branch/master/graph/badge.svg
+   :target: https://codecov.io/gh/AndrewWalker/Dubins-Curves
+   :alt: Code coverage shield
+
+.. |license| image:: https://img.shields.io/badge/License-MIT-blue.svg
+   :target: http://opensource.org/licenses/MIT
+   :alt: license shield
