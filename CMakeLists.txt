@@ -17,16 +17,27 @@ target_include_directories(dubins
     PUBLIC 
     include)
 
-target_link_libraries(dubins 
-    PUBLIC 
-    m)
-target_link_libraries(dubins PRIVATE --coverage)
+if (MSVC)
+    target_link_libraries(dubins 
+        PUBLIC )
+else()
+    target_link_libraries(dubins
+        PUBLIC
+        m)
+    target_link_libraries(dubins PRIVATE --coverage)
+endif(MSVC)
+# target_link_libraries(dubins PRIVATE --coverage)
 
 if (MSVC)
     target_compile_options(dubins PRIVATE /W3)
 else()
     target_compile_options(dubins PRIVATE -Wall -Wextra -Wpedantic -std=gnu89)
 endif()
+
+add_executable(demo
+    examples/demo.c)
+target_link_libraries(demo
+    dubins)
 
 enable_testing()
 
