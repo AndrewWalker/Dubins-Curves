@@ -1,7 +1,4 @@
-extern "C" {
-#include "dubins.h"
-}
-
+#include "DubinsCurve/DubinsCurve.h"
 #include "gtest/gtest.h"
 
 struct Inputs
@@ -299,7 +296,4 @@ TEST_P(MonteCarloTests, Simple)
     }
 }
 
-INSTANTIATE_TEST_CASE_P(Simple,
-                        MonteCarloTests,
-                        ::testing::ValuesIn(params));
-
+INSTANTIATE_TEST_SUITE_P(Simple, MonteCarloTests, ::testing::ValuesIn(params));

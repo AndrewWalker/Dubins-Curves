@@ -1,6 +1,4 @@
-extern "C" {
-#include "dubins.h"
-}
+#include "DubinsCurve/DubinsCurve.h"
 #include <math.h>
 #include "gtest/gtest.h"
 
