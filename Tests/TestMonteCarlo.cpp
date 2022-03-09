@@ -277,7 +277,7 @@ protected:
 TEST_P(MonteCarloTests, Simple)
 {
     DubinsPath path;
-    int code = dubins_path(&path, q0, q1, turning_radius, GetParam().inputs.word);
+    int code = dubinsPath(&path, q0, q1, turning_radius, GetParam().inputs.word);
     if (code != 0)
     {
         code = 1;
@@ -290,7 +290,7 @@ TEST_P(MonteCarloTests, Simple)
         {
             ASSERT_NEAR(path.param[i], GetParam().outputs.params[i], 1e-8);
         }
-        double len = dubins_path_length(&path);
+        double len = dubinsPathLength(&path);
         ASSERT_NEAR(len, GetParam().outputs.length, 1e-8);
     }
 }
