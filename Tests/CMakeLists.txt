@@ -15,21 +15,21 @@ FetchContent_MakeAvailable(googletest)
 include(GoogleTest)
 
 add_executable(
-    UnitTest
+    DubinsCurvesUnitTest
     Main.cpp
     TestMonteCarlo.cpp
     TestAPI.cpp
 )
 
-target_compile_definitions(UnitTest PUBLIC CTEST)
+target_compile_definitions(DubinsCurvesUnitTest PUBLIC CTEST)
 
 target_link_libraries(
-    UnitTest
+    DubinsCurvesUnitTest
     gtest_main
     DubinsCurve
 )
 
-gtest_discover_tests(UnitTest
+gtest_discover_tests(DubinsCurvesUnitTest
     PROPERTIES
       LABELS "unit"
     DISCOVERY_TIMEOUT  # how long to wait (in seconds) before crashing
