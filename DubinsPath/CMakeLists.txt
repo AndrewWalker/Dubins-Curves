@@ -1,31 +1,31 @@
 add_library(
-    DubinsCurve
+    DubinsPath
 )
 
 target_sources(
-    DubinsCurve
+    DubinsPath
     PRIVATE
-        DubinsCurve.cpp
+        DubinsPath.cpp
 )
 
 target_include_directories(
-    DubinsCurve 
+    DubinsPath 
     PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/>
            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 )
 
 install(
-    TARGETS DubinsCurve
-    EXPORT DubinsCurveCore-config
+    TARGETS DubinsPath
+    EXPORT DubinsPathCore-config
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
 install(
-    DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/DubinsCurve/
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/DubinsCurve
+    DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/DubinsPath/
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/DubinsPath
 )
 
 install(
-    EXPORT DubinsCurveCore-config
-    NAMESPACE DubinsCurveCore::
+    EXPORT DubinsPathCore-config
+    NAMESPACE DubinsPathCore::
     DESTINATION ${CMAKE_INSTALL_PREFIX}/cmake
 )

@@ -1,4 +1,4 @@
-#include "DubinsCurve/DubinsCurve.h"
+#include "DubinsPath/DubinsPath.h"
 #include "gtest/gtest.h"
 
 struct Inputs

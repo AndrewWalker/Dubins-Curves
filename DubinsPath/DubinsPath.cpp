@@ -23,7 +23,7 @@
 #define _USE_MATH_DEFINES
 #endif
 #include <math.h>
-#include "DubinsCurve/DubinsCurve.h"
+#include "DubinsPath/DubinsPath.h"
 
 #define EPSILON (10e-10)
 

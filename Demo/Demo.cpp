@@ -17,7 +17,8 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
-#include "DubinsCurve/DubinsCurve.h"
+
+#include "DubinsPath/DubinsPath.h"
 #include <stdio.h>
 
 int printConfiguration(double q[3], double x, void* user_data) {

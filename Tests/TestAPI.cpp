@@ -1,4 +1,4 @@
-#include "DubinsCurve/DubinsCurve.h"
+#include "DubinsPath/DubinsPath.h"
 #include <math.h>
 #include "gtest/gtest.h"
 

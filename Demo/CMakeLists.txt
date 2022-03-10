@@ -13,7 +13,7 @@ target_sources(
 target_link_libraries(
     DubinsPathDemo
     PUBLIC
-        DubinsCurve
+        DubinsPath
 )
 
 install(
