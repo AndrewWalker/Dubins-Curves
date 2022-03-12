@@ -35,7 +35,7 @@ typedef enum
 typedef struct 
 {
     /* the initial configuration */
-    double qi[3];        
+    double initialPose[3];        
     /* the lengths of the three segments */
     double param[3];     
     /* model forward velocity / model angular velocity */
@@ -74,7 +74,7 @@ typedef int (*DubinsPathSamplingCallback)(double q[3], double t, void* user_data
  * @param rho   - turning radius of the vehicle (forward velocity divided by maximum angular velocity)
  * @return      - non-zero on error
  */
-int dubins_shortest_path(DubinsPath* path, double q0[3], double q1[3], double rho);
+int dubinsPathShortestPath(DubinsPath* path, double q0[3], double q1[3], double rho);
 
 /**
  * Generate a path with a specified word from an initial configuration to
@@ -87,14 +87,14 @@ int dubins_shortest_path(DubinsPath* path, double q0[3], double q1[3], double rh
  * @param pathType - the specific path type to use
  * @return         - non-zero on error
  */
-int dubins_path(DubinsPath* path, double q0[3], double q1[3], double rho, DubinsPathType pathType);
+int dubinsPath(DubinsPath* path, double q0[3], double q1[3], double rho, DubinsPathType pathType);
 
 /**
  * Calculate the length of an initialised path
  *
  * @param path - the path to find the length of
  */
-double dubins_path_length(DubinsPath* path);
+double dubinsPathLength(DubinsPath* path);
 
 /**
  * Return the length of a specific segment in an initialized path
@@ -102,7 +102,7 @@ double dubins_path_length(DubinsPath* path);
  * @param path - the path to find the length of
  * @param i    - the segment you to get the length of (0-2)
  */
-double dubins_segment_length(DubinsPath* path, int i);
+double dubinsPathSegmentLength(DubinsPath* path, int i);
 
 /**
  * Return the normalized length of a specific segment in an initialized path
@@ -110,7 +110,7 @@ double dubins_segment_length(DubinsPath* path, int i);
  * @param path - the path to find the length of
  * @param i    - the segment you to get the length of (0-2)
  */
-double dubins_segment_length_normalized( DubinsPath* path, int i );
+double dubinsPathSegmentLengthNormalized( DubinsPath* path, int i );
 
 /**
  * Extract an integer that represents which path type was used
@@ -118,7 +118,7 @@ double dubins_segment_length_normalized( DubinsPath* path, int i );
  * @param path    - an initialised path
  * @return        - one of LSL, LSR, RSL, RSR, RLR or LRL 
  */
-DubinsPathType dubins_path_type(DubinsPath* path);
+DubinsPathType dubinsPathType(DubinsPath* path);
 
 /**
  * Calculate the configuration along the path, using the parameter t
@@ -128,7 +128,7 @@ DubinsPathType dubins_path_type(DubinsPath* path);
  * @param q    - the configuration result
  * @returns    - non-zero if 't' is not in the correct range
  */
-int dubins_path_sample(DubinsPath* path, double t, double q[3]);
+int dubinsPathSample(DubinsPath* path, double t, double q[3]);
 
 /**
  * Walk along the path at a fixed sampling interval, calling the
@@ -143,7 +143,7 @@ int dubins_path_sample(DubinsPath* path, double t, double q[3]);
  *
  * @returns - zero on successful completion, or the result of the callback
  */
-int dubins_path_sample_many(DubinsPath* path, 
+int dubinsPathSampleMany(DubinsPath* path, 
                             double stepSize, 
                             DubinsPathSamplingCallback cb, 
                             void* user_data);
@@ -154,7 +154,7 @@ int dubins_path_sample_many(DubinsPath* path,
  * @param path - an initialised path
  * @param q    - the configuration result
  */
-int dubins_path_endpoint(DubinsPath* path, double q[3]);
+int dubinsPathEndpoint(DubinsPath* path, double q[3]);
 
 /**
  * Convenience function to extract a subset of a path
@@ -163,7 +163,7 @@ int dubins_path_endpoint(DubinsPath* path, double q[3]);
  * @param t       - a length measure, where 0 < t < dubins_path_length(path)
  * @param newpath - the resultant path
  */
-int dubins_extract_subpath(DubinsPath* path, double t, DubinsPath* newpath);
+int dubinsPathExtractSubpath(DubinsPath* path, double t, DubinsPath* newpath);
 
 
 #endif /* DUBINS_H */

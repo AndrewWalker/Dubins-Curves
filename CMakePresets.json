@@ -1,0 +1,59 @@
+{
+    "version": 2,
+    "configurePresets": [
+        {
+            "name": "Debug",
+            "displayName": "Debug Configuration",
+            "description": "Ninja build system is used for debugging.",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/Binaries/${presetName}/Intermediate",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_TOOLCHAIN_FILE": "",
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/Binaries/${presetName}/Output",
+                "CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG": "${sourceDir}/Binaries/${presetName}/Intermediate",
+                "CMAKE_C_COMPILER": "clang",
+                "CMAKE_CXX_COMPILER": "clang++",
+                "CMAKE_OSX_ARCHITECTURES": "x86_64"
+            }
+        },
+        {
+            "name": "Release",
+            "displayName": "Release Configuration",
+            "description": "Ninja build system is used for release.",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/Binaries/${presetName}/Intermediate",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_TOOLCHAIN_FILE": "",
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/Binaries/${presetName}/Output",
+                "CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG": "${sourceDir}/Binaries/${presetName}/Intermediate",
+                "CMAKE_C_COMPILER": "clang",
+                "CMAKE_CXX_COMPILER": "clang++",
+                "CMAKE_OSX_ARCHITECTURES": "x86_64"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "Debug",
+            "description": "",
+            "displayName": "",
+            "configurePreset": "Debug"
+        },
+        {
+            "name": "Release",
+            "description": "",
+            "displayName": "",
+            "configurePreset": "Release"
+        }
+    ],
+    "testPresets": [
+        {
+            "name": "GoogleTest",
+            "description": "Google test framework",
+            "displayName": "GTest",
+            "configurePreset": "Debug"
+        }
+    ]
+}

@@ -1,14 +1,11 @@
-extern "C" {
-#include "dubins.h"
-}
+#include "DubinsPath/DubinsPath.h"
 #include <math.h>
 #include "gtest/gtest.h"
 
 class DubinsTests : public ::testing::Test
 {
 public:
-       
-    void SetUp() 
+    void SetUp()
     {
         turning_radius = 1.0;
         configure_inputs(0.0, 0.0, 1.0);
@@ -34,7 +31,7 @@ TEST_F(DubinsTests, shortestPath)
 {
     // find the shortest path
     DubinsPath path;
-    int err = dubins_shortest_path(&path, q0, q1, turning_radius);
+    int err = dubinsPathShortestPath(&path, q0, q1, turning_radius);
     ASSERT_EQ(err, EDUBOK);
 }
 
@@ -42,17 +39,17 @@ TEST_F(DubinsTests, invalidTurningRadius)
 {
     // find the shortest path
     DubinsPath path;
-    int err = dubins_shortest_path(&path, q0, q1, -1.0);
+    int err = dubinsPathShortestPath(&path, q0, q1, -1.0);
     ASSERT_EQ(err, EDUBBADRHO);
 }
 
 TEST_F(DubinsTests, noPath)
 {
     configure_inputs(0.0, 0.0, 10.0);
-    
+
     // find the shortest path
     DubinsPath path;
-    int err = dubins_path(&path, q0, q1, turning_radius, LRL);
+    int err = dubinsPath(&path, q0, q1, turning_radius, LRL);
     ASSERT_EQ(err, EDUBNOPATH);
 }
 
@@ -62,8 +59,8 @@ TEST_F(DubinsTests, pathLength)
 
     // find the shortest path
     DubinsPath path;
-    dubins_shortest_path(&path, q0, q1, turning_radius);
-    double res = dubins_path_length(&path);
+    dubinsPathShortestPath(&path, q0, q1, turning_radius);
+    double res = dubinsPathLength(&path);
     ASSERT_DOUBLE_EQ(res, 4.0);
 }
 
@@ -71,7 +68,7 @@ TEST_F(DubinsTests, simplePath)
 {
     // find the parameters for a single Dubin's word
     DubinsPath path;
-    int err = dubins_path(&path, q0, q1, turning_radius, LSL);
+    int err = dubinsPath(&path, q0, q1, turning_radius, LSL);
     ASSERT_EQ(err, EDUBOK);
 }
 
@@ -81,14 +78,13 @@ TEST_F(DubinsTests, segmentLengths)
 
     // find the parameters for a single Dubin's word
     DubinsPath path;
-    int err = dubins_path(&path, q0, q1, turning_radius, LSL);
+    int err = dubinsPath(&path, q0, q1, turning_radius, LSL);
     ASSERT_EQ(err, EDUBOK);
-    ASSERT_DOUBLE_EQ(dubins_segment_length(&path, -1), INFINITY);
-    ASSERT_DOUBLE_EQ(dubins_segment_length(&path, 0), 0.0);
-    ASSERT_DOUBLE_EQ(dubins_segment_length(&path, 1), 4.0);
-    ASSERT_DOUBLE_EQ(dubins_segment_length(&path, 2), 0.0);
-    ASSERT_DOUBLE_EQ(dubins_segment_length(&path, 3), INFINITY);
-
+    ASSERT_DOUBLE_EQ(dubinsPathSegmentLength(&path, -1), INFINITY);
+    ASSERT_DOUBLE_EQ(dubinsPathSegmentLength(&path, 0), 0.0);
+    ASSERT_DOUBLE_EQ(dubinsPathSegmentLength(&path, 1), 4.0);
+    ASSERT_DOUBLE_EQ(dubinsPathSegmentLength(&path, 2), 0.0);
+    ASSERT_DOUBLE_EQ(dubinsPathSegmentLength(&path, 3), INFINITY);
 }
 
 TEST_F(DubinsTests, SegmentLengthNormalized)
@@ -97,16 +93,14 @@ TEST_F(DubinsTests, SegmentLengthNormalized)
 
     // find the parameters for a single Dubin's word
     DubinsPath path;
-    int err = dubins_path(&path, q0, q1, turning_radius, LSL);
+    int err = dubinsPath(&path, q0, q1, turning_radius, LSL);
     ASSERT_EQ(err, EDUBOK);
-    ASSERT_DOUBLE_EQ(dubins_segment_length_normalized(&path, -1), INFINITY);
-    ASSERT_DOUBLE_EQ(dubins_segment_length_normalized(&path, 0), 0.0);
-    ASSERT_DOUBLE_EQ(dubins_segment_length_normalized(&path, 1), 4.0);
-    ASSERT_DOUBLE_EQ(dubins_segment_length_normalized(&path, 2), 0.0);
-    ASSERT_DOUBLE_EQ(dubins_segment_length_normalized(&path, 3), INFINITY);
-
+    ASSERT_DOUBLE_EQ(dubinsPathSegmentLengthNormalized(&path, -1), INFINITY);
+    ASSERT_DOUBLE_EQ(dubinsPathSegmentLengthNormalized(&path, 0), 0.0);
+    ASSERT_DOUBLE_EQ(dubinsPathSegmentLengthNormalized(&path, 1), 4.0);
+    ASSERT_DOUBLE_EQ(dubinsPathSegmentLengthNormalized(&path, 2), 0.0);
+    ASSERT_DOUBLE_EQ(dubinsPathSegmentLengthNormalized(&path, 3), INFINITY);
 }
-
 
 TEST_F(DubinsTests, sample)
 {
@@ -114,17 +108,17 @@ TEST_F(DubinsTests, sample)
 
     // find the parameters for a single Dubin's word
     DubinsPath path;
-    int err = dubins_path(&path, q0, q1, turning_radius, LSL);
+    int err = dubinsPath(&path, q0, q1, turning_radius, LSL);
     ASSERT_EQ(err, EDUBOK);
 
     double qsamp[3];
-    err = dubins_path_sample(&path, 0.0, qsamp);
+    err = dubinsPathSample(&path, 0.0, qsamp);
     ASSERT_EQ(err, EDUBOK);
     ASSERT_DOUBLE_EQ(qsamp[0], q0[0]);
     ASSERT_DOUBLE_EQ(qsamp[1], q0[1]);
     ASSERT_DOUBLE_EQ(qsamp[2], q0[2]);
 
-    err = dubins_path_sample(&path, 4.0, qsamp);
+    err = dubinsPathSample(&path, 4.0, qsamp);
     ASSERT_EQ(err, EDUBOK);
     ASSERT_DOUBLE_EQ(qsamp[0], q1[0]);
     ASSERT_DOUBLE_EQ(qsamp[1], q1[1]);
@@ -137,47 +131,48 @@ TEST_F(DubinsTests, sampleOutOfBounds)
 
     // find the parameters for a single Dubin's word
     DubinsPath path;
-    int err = dubins_path(&path, q0, q1, turning_radius, LSL);
+    int err = dubinsPath(&path, q0, q1, turning_radius, LSL);
     ASSERT_EQ(err, EDUBOK);
 
     double qsamp[3];
-    err = dubins_path_sample(&path, -1.0, qsamp);
+    err = dubinsPathSample(&path, -1.0, qsamp);
     ASSERT_EQ(err, EDUBPARAM);
-    err = dubins_path_sample(&path, 5.0, qsamp);
+    err = dubinsPathSample(&path, 5.0, qsamp);
     ASSERT_EQ(err, EDUBPARAM);
 }
 
-int nop_callback(double q[3], double t, void* data) 
+int nop_callback(double q[3], double t, void *data)
 {
     return 0;
 }
 
 TEST_F(DubinsTests, sampleManyLSL)
 {
-    configure_inputs(M_PI/2,-M_PI/2, 4.0);
+    configure_inputs(M_PI / 2, -M_PI / 2, 4.0);
 
     // find the parameters for a single Dubin's word
     DubinsPath path;
-    int err = dubins_path(&path, q0, q1, turning_radius, LSL);
+    int err = dubinsPath(&path, q0, q1, turning_radius, LSL);
     ASSERT_EQ(err, EDUBOK);
-    err = dubins_path_sample_many(&path, 1.0, &nop_callback, NULL);
+    err = dubinsPathSampleMany(&path, 1.0, &nop_callback, NULL);
 }
 
 TEST_F(DubinsTests, sampleManyRSR)
 {
-    configure_inputs(M_PI/2,-M_PI/2, 4.0);
+    configure_inputs(M_PI / 2, -M_PI / 2, 4.0);
 
     // find the parameters for a single Dubin's word
     DubinsPath path;
-    int err = dubins_path(&path, q0, q1, turning_radius, RLR);
+    int err = dubinsPath(&path, q0, q1, turning_radius, RLR);
     ASSERT_EQ(err, EDUBOK);
-    err = dubins_path_sample_many(&path, 1.0, &nop_callback, NULL);
+    err = dubinsPathSampleMany(&path, 1.0, &nop_callback, NULL);
 }
 
-int out_out_early_callback(double q[3], double t, void* data) 
+int out_out_early_callback(double q[3], double t, void *data)
 {
-    int& value = *((int*)data);
-    if( value > 2 ) {
+    int &value = *((int *)data);
+    if (value > 2)
+    {
         return 1;
     }
     value += 1;
@@ -190,11 +185,11 @@ TEST_F(DubinsTests, sampleManyOptOutEarly)
 
     // find the parameters for a single Dubin's word
     DubinsPath path;
-    int err = dubins_path(&path, q0, q1, turning_radius, LSL);
+    int err = dubinsPath(&path, q0, q1, turning_radius, LSL);
     ASSERT_EQ(err, EDUBOK);
 
     int count = 0;
-    err = dubins_path_sample_many(&path, 1.0, &out_out_early_callback, (void*)(&count));
+    err = dubinsPathSampleMany(&path, 1.0, &out_out_early_callback, (void *)(&count));
     ASSERT_EQ(err, 1);
     ASSERT_EQ(count, 3);
 }
@@ -204,11 +199,13 @@ TEST_F(DubinsTests, pathType)
     // find the parameters for a single Dubin's word
     DubinsPath path;
 
-    for(int i = 0; i < 6; i++) {
+    for (int i = 0; i < 6; i++)
+    {
         DubinsPathType t = (DubinsPathType)i;
-        int err = dubins_path(&path, q0, q1, turning_radius, t);
-        if( err == EDUBOK ) {
-            ASSERT_EQ(t, dubins_path_type(&path));
+        int err = dubinsPath(&path, q0, q1, turning_radius, t);
+        if (err == EDUBOK)
+        {
+            ASSERT_EQ(t, dubinsPathType(&path));
         }
     }
 }
@@ -219,11 +216,11 @@ TEST_F(DubinsTests, endPoint)
 
     // find the parameters for a single Dubin's word
     DubinsPath path;
-    int err = dubins_path(&path, q0, q1, turning_radius, LSL);
+    int err = dubinsPath(&path, q0, q1, turning_radius, LSL);
     ASSERT_EQ(err, EDUBOK);
 
     double qsamp[3];
-    err = dubins_path_endpoint(&path, qsamp);
+    err = dubinsPathEndpoint(&path, qsamp);
     ASSERT_EQ(err, EDUBOK);
     ASSERT_NEAR(qsamp[0], q1[0], 1e-8);
     ASSERT_NEAR(qsamp[1], q1[1], 1e-8);
@@ -236,15 +233,15 @@ TEST_F(DubinsTests, extractSubpath)
 
     // find the parameters for a single Dubin's word
     DubinsPath path;
-    int err = dubins_path(&path, q0, q1, turning_radius, LSL);
+    int err = dubinsPath(&path, q0, q1, turning_radius, LSL);
     ASSERT_EQ(err, EDUBOK);
 
     DubinsPath subpath;
-    err = dubins_extract_subpath(&path, 2.0, &subpath);
+    err = dubinsPathExtractSubpath(&path, 2.0, &subpath);
     ASSERT_EQ(err, 0);
 
     double qsamp[3];
-    err = dubins_path_endpoint(&subpath, qsamp);
+    err = dubinsPathEndpoint(&subpath, qsamp);
     ASSERT_EQ(err, EDUBOK);
     ASSERT_NEAR(qsamp[0], 2.0, 1e-8);
     ASSERT_NEAR(qsamp[1], 0.0, 1e-8);
@@ -257,12 +254,10 @@ TEST_F(DubinsTests, extractInvalidSubpath)
 
     // find the parameters for a single Dubin's word
     DubinsPath path;
-    int err = dubins_path(&path, q0, q1, turning_radius, LSL);
+    int err = dubinsPath(&path, q0, q1, turning_radius, LSL);
     ASSERT_EQ(err, EDUBOK);
 
     DubinsPath subpath;
-    err = dubins_extract_subpath(&path, 8.0, &subpath);
+    err = dubinsPathExtractSubpath(&path, 8.0, &subpath);
     ASSERT_NE(err, 0);
 }
-
-
